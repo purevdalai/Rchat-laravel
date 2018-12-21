@@ -17,6 +17,7 @@ class CreateQuestionsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->integer('user_id')->unsigned();
+            $table->boolean('closed')->default(false);
             $table->timestamps();
         });
     }
