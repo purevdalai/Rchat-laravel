@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\News;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
@@ -36,7 +38,27 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $news = new News;
+        $image = $request->image;
+        $host = $request->getHttpHost();
+        $https = 'http://';
+
+        $imageName = time().'.'.$image->getClientOriginalExtension();
+        $image->move('images/news/', $imageName);
+
+        $news->image = $https . $host . '/images/news/' . $imageName;
+        $news->title = $request->title;
+        $news->content = $request->content;
+        $news->user_id = $request->user()->id;
+        
+        $result = [ 'status' => 0, 'response' => 'Файл хуулахад алдаа гарлаа!' ];
+
+        if ( $news->save() ) {
+            $result['status'] = 1;
+            $result['response'] = 'Таны нийтлэлийг амжилтай бүртгэллээ!';
+        }
+
+        return response($result, 201);
     }
 
     /**
