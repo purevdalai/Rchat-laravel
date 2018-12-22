@@ -14,7 +14,8 @@ class NewsController extends Controller
      */
     public function index()
     {
-        //
+        $news = News::orderBy('created_at', 'desc')->get();
+        return response($news, 200);
     }
 
     /**
@@ -44,9 +45,12 @@ class NewsController extends Controller
      * @param  \App\News  $news
      * @return \Illuminate\Http\Response
      */
-    public function show(News $news)
+    public function show(Request $request)
     {
-        //
+        $news = News::find($request->id);
+        $response['article'] = $news;
+        $response['user'] = $news->user;
+        return response($response, 200);
     }
 
     /**
@@ -57,7 +61,7 @@ class NewsController extends Controller
      */
     public function edit(News $news)
     {
-        //
+        
     }
 
     /**

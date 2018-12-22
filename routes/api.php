@@ -19,4 +19,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     });
 
     Route::get('/employee', 'UserController@index');
+    Route::get('/article', 'NewsController@index');
+    Route::get('/article/{id}/show', 'NewsController@show');
 });
