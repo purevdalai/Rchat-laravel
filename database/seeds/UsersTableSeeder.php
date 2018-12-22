@@ -13,22 +13,10 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        
-        $user1 = [
-            'name' => 'Purev Dalai',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make('secret'),
-        ];
-
-        User::create($user1);
-
-
-        $user2 = [
-            'name' => 'James Robinson',
-            'email' => 'system@gmail.com',
-            'password' => Hash::make('secret'),
-        ];
-
-        User::create($user2);
+        factory(User::class, 25)->create()->each(function($user) {
+            for ( $i = 0; $i <= 3; $i++ ) {
+                $user->news()->save(factory(App\News::class)->make());
+            }
+        });
     }
 }
