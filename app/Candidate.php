@@ -11,6 +11,6 @@ class Candidate extends Model
     }
 
     public function votes() {
-        return $this->hasMany('App\Vote');
+        return $this->hasMany('App\Vote')->with('user');
     }
 }

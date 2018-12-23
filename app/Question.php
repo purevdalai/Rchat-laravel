@@ -11,7 +11,7 @@ class Question extends Model
     }
 
     public function candidates() {
-        return $this->hasMany('App\Candidate');
+        return $this->hasMany('App\Candidate')->with('votes');
     }
 
     public function votes() {

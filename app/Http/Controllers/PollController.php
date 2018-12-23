@@ -53,7 +53,7 @@ class PollController extends Controller
     }
 
     public function show(Request $request) {
-        $question = Question::with('user')->with('candidates')->find($request->id);
+        $question = Question::with('user')->with('votes')->with('candidates')->find($request->id);
         return response($question, 200);
     }
 }
