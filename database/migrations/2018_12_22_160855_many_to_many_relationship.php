@@ -29,9 +29,11 @@ class ManyToManyRelationship extends Migration
                 $table->integer('meeting_id')->unsigned();
             });
     
-            Schema::create('user_room' , function($table) {
+            Schema::create('room_user' , function($table) {
                 $table->integer('user_id')->unsigned();
                 $table->integer('room_id')->unsigned();
+                $table->boolean('admin')->default(false);
+                $table->bigInteger('count_record')->default(0);
             });
         });
     }
@@ -46,6 +48,6 @@ class ManyToManyRelationship extends Migration
         Schema::dropIfExists('user_task');
         Schema::dropIfExists('user_question');
         Schema::dropIfExists('user_meeting');
-        Schema::dropIfExists('user_room');
+        Schema::dropIfExists('room_user');
     }
 }

@@ -48,7 +48,7 @@ class CreateForeignKeysTable extends Migration
             $table->foreign('message_id')->references('id')->on('messages')->onDelete('cascade');
         });
 
-        Schema::table('user_room' , function($table){
+        Schema::table('room_user' , function($table){
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

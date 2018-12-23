@@ -12,9 +12,13 @@ class RoomController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $result = [];
+        $user = $request->user();
+        $result['user'] = $user;
+        $result['rooms'] = $user->rooms;
+        return response($result, 200);
     }
 
     /**
