@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class PollController extends Controller
 {
     public function index() {
-        $questions = Question::with('user')->orderBy('created_at', 'desc')->get();
+        $questions = Question::with('user')->with('votes')->orderBy('created_at', 'desc')->get();
         // $questions = Question::with('candidates')->orderBy('created_at', 'desc')->get();
         return response($questions, 200);
     }
@@ -40,6 +40,7 @@ class PollController extends Controller
         $result = ['status' => 1, 'msg' => 'Таны сонголт амжилттай хадгаллаа.', 'err' => []];
         for ( $i = 0; $i < sizeof($request->votes); $i++ ) {
             $vote = new Vote;
+            $vote->question_id = $request->question;
             $vote->candidate_id = $request->votes[$i];
             $vote->user_id = $request->user()->id;
             if ( !$vote->save() ) {

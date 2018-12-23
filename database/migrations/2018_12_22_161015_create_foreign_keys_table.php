@@ -54,6 +54,7 @@ class CreateForeignKeysTable extends Migration
         });
 
         Schema::table('votes' , function($table){
+            $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
             $table->foreign('candidate_id')->references('id')->on('candidates')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
