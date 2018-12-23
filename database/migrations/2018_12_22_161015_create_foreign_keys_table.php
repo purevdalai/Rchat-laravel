@@ -20,17 +20,9 @@ class CreateForeignKeysTable extends Migration
         Schema::table('news' , function($table){
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
-        
-        Schema::table('tasks' , function($table){
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        });
 
         Schema::table('user_task' , function($table){
             $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        });
-        
-        Schema::table('meetings' , function($table){
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
@@ -54,10 +46,6 @@ class CreateForeignKeysTable extends Migration
 
         Schema::table('files' , function($table){
             $table->foreign('message_id')->references('id')->on('messages')->onDelete('cascade');
-        });
-
-        Schema::table('rooms' , function($table){
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::table('user_room' , function($table){

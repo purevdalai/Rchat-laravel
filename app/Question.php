@@ -10,11 +10,7 @@ class Question extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function users() {
-        return $this->belongsToMany('App\User');
-    }
-
     public function candidates() {
-        return $this->belongsToMany('App\Candidate');
+        return $this->hasMany('App\Candidate');
     }
 }

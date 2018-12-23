@@ -22,4 +22,9 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/article', 'NewsController@index');
     Route::post('/article', 'NewsController@store');
     Route::get('/article/{id}/show', 'NewsController@show');
+
+    Route::get('/poll', 'PollController@index');
+    Route::get('/poll/{id}/show', 'PollController@show');
+    Route::post('/poll', 'PollController@store');
+    Route::post('/vote', 'PollController@vote_store');
 });
