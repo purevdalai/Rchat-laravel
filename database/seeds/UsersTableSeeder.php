@@ -18,12 +18,19 @@ class UsersTableSeeder extends Seeder
             for ( $i = 0; $i <= 3; $i++ ) {
                 $user->news()->save(factory(App\News::class)->make());
             }
+            
+            $ownRoom = new Room;
+            $ownRoom->save();
+            $ownRoom->users()->attach($user);
+
             $users = User::all();
             foreach ( $users as $item ) {
-                $room = new Room;
-                $room->save();
-                $room->users()->attach($item);
-                $room->users()->attach($user);
+                if ( $user->id < $item->id ) {
+                    $room = new Room;
+                    $room->save();
+                    $room->users()->attach($item);
+                    $room->users()->attach($user);
+                } 
             }
         });
     }
