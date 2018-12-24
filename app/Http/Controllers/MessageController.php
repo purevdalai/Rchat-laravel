@@ -35,7 +35,19 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $message = new Message;
+        $message->content = $request->content;
+        $message->room_id = $request->room_id;
+        $message->user_id = $request->user()->id;
+        $result = [ 'status' => 0, 'response' => 'Таны мессежийг хадгалж чадсангүй!' ];
+
+        if ( $message->save() ) {
+            $result['status'] = 1;
+            $result['response'] = 'Таны мессежийг амжилттай хадгаллаа!';
+            $message->user = $request->user();
+            $result['message'] = $message;
+        }
+        return response($result, 201);
     }
 
     /**

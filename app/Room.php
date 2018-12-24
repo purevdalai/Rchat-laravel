@@ -11,6 +11,6 @@ class Room extends Model
     }
 
     public function messages() {
-        return $this->hasMany('App\Message')->with('messages');
+        return $this->hasMany('App\Message')->with('user');
     }
 }

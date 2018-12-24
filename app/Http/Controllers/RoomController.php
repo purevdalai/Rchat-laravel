@@ -47,9 +47,12 @@ class RoomController extends Controller
      * @param  \App\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function show(Room $room)
+    public function show(Request $request)
     {
-        //
+        $room = Room::find($request->id);
+        $room->messages = $room->messages;
+        $room->users = $room->users; 
+        return response($room, 200);
     }
 
     /**
