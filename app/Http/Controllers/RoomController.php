@@ -42,6 +42,7 @@ class RoomController extends Controller
         $room = new Room;
         $room->name = $request->name;
         $room->description = $request->description;
+        $room->type = 3;
 
         $image = $request->image;
         $http = 'http://';

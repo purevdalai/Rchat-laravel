@@ -19,6 +19,7 @@ class CreateRoomsTable extends Migration
             $table->longText('description')->nullable();
             $table->string('image')->nullable();
             $table->bigInteger('total_record')->default(0);
+            $table->integer('type');
             $table->timestamps();
         });
     }

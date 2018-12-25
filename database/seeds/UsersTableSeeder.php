@@ -20,6 +20,7 @@ class UsersTableSeeder extends Seeder
             }
             
             $ownRoom = new Room;
+            $ownRoom = 1;
             $ownRoom->save();
             $ownRoom->users()->attach($user);
 
@@ -27,10 +28,11 @@ class UsersTableSeeder extends Seeder
             foreach ( $users as $item ) {
                 if ( $user->id < $item->id ) {
                     $room = new Room;
+                    $room->type = 2;
                     $room->save();
                     $room->users()->attach($item);
                     $room->users()->attach($user);
-                } 
+                }
             }
         });
     }
