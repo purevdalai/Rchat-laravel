@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Room;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class RoomController extends Controller
@@ -48,14 +49,14 @@ class RoomController extends Controller
         $http = 'http://';
         $host = $request->getHttpHost();
         $imageName = time().'.'.$image->getClientOriginalExtension();
-        $image->move('images/news/', $imageName);
-        $room->image = $http . $host . '/images/news/' . $imageName;
+        $image->move('images/rooms/', $imageName);
+        $room->image = $http . $host . '/images/rooms/' . $imageName;
         $result = [ 'status' => 0, 'response' => 'Өрөөг үүсгэхэд алдаа гарлаа!' ];
         if ( $room->save() ) {
             $result['status'] = 1;
             $result['response'] = 'Өрөөг амжилттай үүсгэллээ!';
         }
-        $room->users()->attach($request->user());
+        $room->users()->attach($request->user(), ['admin' => 1]);
         $users = explode(',', $request->users);
         $room->users()->sync($users, false);
         return response($result, 201);
@@ -93,9 +94,27 @@ class RoomController extends Controller
      * @param  \App\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Room $room)
+    public function update(Request $request)
     {
-        //
+        $room = Room::find($request->id);
+        $room->name = $request->name;
+        if ( isset($request->description) ) {
+            $room->description = $request->description;
+        }
+        if ( isset($request->image) ) {
+            $image = $request->image;
+            $http = 'http://';
+            $host = $request->getHttpHost();
+            $imageName = time().'.'.$image->getClientOriginalExtension();
+            $image->move('images/rooms/', $imageName);
+            $room->image = $http . $host . '/images/rooms/' . $imageName;
+        }
+        $result = [ 'status' => 0, 'response' => 'Өрөөний мэдээллийг шинэчлэхэд алдаа гарлаа!' ];
+        if ( $room->save() ) {
+            $result['status'] = 1;
+            $result['response'] = 'Өрөөний мэдээллийг амжилттай шинэчлэв!';
+        }
+        return response($result, 200);
     }
 
     /**

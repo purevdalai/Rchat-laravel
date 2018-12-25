@@ -58,6 +58,8 @@ class User extends Authenticatable
     }
 
     public function rooms() {
-        return $this->belongsToMany('App\Room')->with('users');
+        return $this->belongsToMany('App\Room')
+            ->withPivot('admin')
+            ->with('users');
     }
 }

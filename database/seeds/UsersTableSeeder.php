@@ -14,15 +14,15 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class, 4)->create()->each(function($user) {
+        factory(User::class, 25)->create()->each(function($user) {
             for ( $i = 0; $i <= 3; $i++ ) {
                 $user->news()->save(factory(App\News::class)->make());
             }
             
             $ownRoom = new Room;
-            $ownRoom = 1;
+            $ownRoom->type = 1;
             $ownRoom->save();
-            $ownRoom->users()->attach($user);
+            $ownRoom->users()->attach($user, ['admin' => 1]);
 
             $users = User::all();
             foreach ( $users as $item ) {
