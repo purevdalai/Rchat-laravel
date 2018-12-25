@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Room;
 use Illuminate\Http\Request;
 
@@ -38,7 +39,25 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $room = new Room;
+        $room->name = $request->name;
+        $room->description = $request->description;
+
+        $image = $request->image;
+        $http = 'http://';
+        $host = $request->getHttpHost();
+        $imageName = time().'.'.$image->getClientOriginalExtension();
+        $image->move('images/news/', $imageName);
+        $room->image = $http . $host . '/images/news/' . $imageName;
+        $result = [ 'status' => 0, 'response' => 'Өрөөг үүсгэхэд алдаа гарлаа!' ];
+        if ( $room->save() ) {
+            $result['status'] = 1;
+            $result['response'] = 'Өрөөг амжилттай үүсгэллээ!';
+        }
+        $room->users()->attach($request->user());
+        $users = explode(',', $request->users);
+        $room->users()->sync($users, false);
+        return response($result, 201);
     }
 
     /**
@@ -51,7 +70,7 @@ class RoomController extends Controller
     {
         $room = Room::find($request->id);
         $room->messages = $room->messages;
-        $room->users = $room->users; 
+        $room->users = $room->users;
         return response($room, 200);
     }
 

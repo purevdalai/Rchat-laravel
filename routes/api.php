@@ -30,5 +30,6 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::get('/room', 'RoomController@index');
     Route::get('/room/{id}/show', 'RoomController@show');
+    Route::post('/room', 'RoomController@store');
     Route::post('/message', 'MessageController@store');
 });
