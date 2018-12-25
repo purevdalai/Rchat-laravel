@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Redis;
 use App\Message;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
+    protected $redis;
+
+    function __construct()
+    {
+        $this->redis = Redis::connection();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -40,12 +48,15 @@ class MessageController extends Controller
         $message->room_id = $request->room_id;
         $message->user_id = $request->user()->id;
         $result = [ 'status' => 0, 'response' => 'Таны мессежийг хадгалж чадсангүй!' ];
-
+        
         if ( $message->save() ) {
             $result['status'] = 1;
             $result['response'] = 'Таны мессежийг амжилттай хадгаллаа!';
             $message->user = $request->user();
             $result['message'] = $message;
+            
+            $redis = Redis::connection();
+            $redis->publish('message', $message);
         }
         return response($result, 201);
     }
