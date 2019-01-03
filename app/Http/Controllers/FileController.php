@@ -12,9 +12,13 @@ class FileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function download(Request $request)
     {
-        //
+        // return 'files/'. $request->message_id . '/'. $request->name;
+        $ez =  'files/'. $request->message_id . '/'. $request->name;
+        // return response()->file($ez);
+        return response()->file('files/1/1546569856.jpg');
+        // return response()->file($ez);
     }
 
     /**
