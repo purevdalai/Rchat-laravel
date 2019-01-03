@@ -55,8 +55,7 @@ class MessageController extends Controller
             $message->user = $request->user();
             $result['message'] = $message;
             
-            $redis = Redis::connection();
-            $redis->publish('message', $message);
+            $this->redis->publish('message', $message);
         }
         return response($result, 201);
     }
