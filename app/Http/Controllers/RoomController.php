@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Redis;
 use App\User;
 use App\Room;
 use Illuminate\Support\Facades\DB;
@@ -9,6 +10,13 @@ use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
+    protected $redis;
+
+    function __construct()
+    {
+        $this->redis = Redis::connection();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -59,6 +67,10 @@ class RoomController extends Controller
         $room->users()->attach($request->user(), ['admin' => 1]);
         $users = explode(',', $request->users);
         $room->users()->sync($users, false);
+        $room['code'] = 'NEW_ROOM';
+        $room['users'] = $room->users;
+        $room['user'] = $request->user();
+        $this->redis->publish('message', $room);
         return response($result, 201);
     }
 
