@@ -126,6 +126,10 @@ class RoomController extends Controller
             $result['status'] = 1;
             $result['response'] = 'Өрөөний мэдээллийг амжилттай шинэчлэв!';
         }
+        $room['code'] = 'UPDATE_ROOM';
+        $room['users'] = $room->users;
+        $room['user'] = $request->user();
+        $this->redis->publish('message', $room);
         return response($result, 200);
     }
 

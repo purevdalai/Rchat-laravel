@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Redis;
+use App\File as UserFile;
 use App\Message;
 use Illuminate\Http\Request;
 
@@ -33,6 +34,41 @@ class MessageController extends Controller
     public function create()
     {
         //
+    }
+
+    public function files(Request $request)
+    {
+        $message = new Message;
+        $message->content = 'Файлууд';
+        $message->room_id = $request->room_id;
+        $message->user_id = $request->user()->id;
+
+        $result = [ 'status' => 0, 'response' => 'Таны мессежийг хадгалж чадсангүй!' ];
+        
+        if ( $message->save() ) {
+            $result['status'] = 1;
+            $result['response'] = 'Таны мессежийг амжилттай хадгаллаа!';
+            $message->user = $request->user();
+            $result['message'] = $message;
+            // upload files
+            
+            $files = $request->files;
+            $http = 'http://';
+            $host = $request->getHttpHost();
+
+            foreach ( $files as $file ) {
+                $filename = time().'.'.$file->getClientOriginalExtension();
+                $file->move('files/'.$message->id.'/', $filename);
+                $userFile = new UserFile;
+                $userFile->path = $http . $host . 'files/'.$message->id.'/' . $imageName;
+                $userFile->message_id = $message->id;
+                $userFile->save();
+            }
+
+            $message['code'] = 'NEW_MESSAGE';
+            $this->redis->publish('message', $message);
+        }
+        return response($result, 201);
     }
 
     /**
